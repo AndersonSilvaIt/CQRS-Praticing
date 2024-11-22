@@ -1,6 +1,8 @@
-﻿using CleanArch.Domain.Abstractions;
+﻿using CleanArch.Application.Members.Commands.Validations;
+using CleanArch.Domain.Abstractions;
 using CleanArch.Infrastructure.Context;
 using CleanArch.Infrastructure.Repositories;
+using FluentValidation;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,10 +36,10 @@ namespace CleanArch.CrossCutting.AppDependencies
             services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssemblies(myHandlers);
-                //cfg.AddOpenBehavior(typeof(ValidationBehaviour<,>));
+                cfg.AddOpenBehavior(typeof(ValidationBehaviour<,>));
             });
 
-           // services.AddValidatorsFromAssembly(Assembly.Load("CleanArch.Application"));
+            services.AddValidatorsFromAssembly(Assembly.Load("CleanArch.Application"));
 
             return services;
         }
