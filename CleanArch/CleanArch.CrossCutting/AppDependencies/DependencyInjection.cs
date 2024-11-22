@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data;
+using System.Reflection;
 
 namespace CleanArch.CrossCutting.AppDependencies
 {
@@ -27,9 +28,16 @@ namespace CleanArch.CrossCutting.AppDependencies
 
             services.AddScoped<IMemberRepository, MemberRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IMemberDapperRepository, MemberDapperRepository>();
 
             var myHandlers = AppDomain.CurrentDomain.Load("CleanArch.Application");
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(myHandlers));
+            services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssemblies(myHandlers);
+                //cfg.AddOpenBehavior(typeof(ValidationBehaviour<,>));
+            });
+
+           // services.AddValidatorsFromAssembly(Assembly.Load("CleanArch.Application"));
 
             return services;
         }
